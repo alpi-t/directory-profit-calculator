@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Profit Calculator</title>
+</head>
+<body>
+    <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 0 auto; padding: 12px;">
+        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); padding: 1.5rem;">
+            <!-- Traffic Section -->
+            <div style="background: rgba(0,136,255,0.05); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+                <h2 style="color: #0088FF; font-size: 1.25rem; margin: 0 0 1.25rem 0;">Traffic Estimation</h2>
+                <div style="display: grid; gap: 1.5rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="business-listings" style="font-size: 1rem; color: #0088FF;">Business Listings</label>
+                            <span id="listings-value" style="font-weight: 600; color: #0088FF; font-size: 1rem;">25,000</span>
+                        </div>
+                        <input type="range" id="business-listings" min="0" max="50000" step="100" value="25000"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                        <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
+                            <span>0</span>
+                            <span>50,000</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="visitors-per-listing" style="font-size: 1rem; color: #0088FF;">Monthly Visitors per Listing</label>
+                            <span id="visitors-value" style="font-weight: 600; color: #0088FF; font-size: 1rem;">75</span>
+                        </div>
+                        <input type="range" id="visitors-per-listing" min="0" max="1000" step="1" value="75"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                        <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
+                            <span>0</span>
+                            <span>1,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Sources Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Visual Ads Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        1. Visual Ads Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Visual ads provide revenue through platforms like Google Ads, Mediavine, Raptive, etc.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="rpm" style="font-size: 0.875rem; color: #0088FF;">Revenue per 1,000 Views (RPM)</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="rpm-value">7.1</span></span>
+                        </div>
+                        <input type="range" id="rpm" min="0" max="100" step="0.1" value="7.1"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">Visual Ads Revenue:</div>
+                        <div id="ads-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Paid Listings Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        2. Paid Listings Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Allow businesses to claim their listings for free, but offer a paid sponsorship option to unlock premium features.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="conversion-rate" style="font-size: 0.875rem; color: #0088FF;">Conversion Rate</label>
+                            <span style="font-size: 1rem; color: #0088FF;"><span id="conversion-value">5</span>%</span>
+                        </div>
+                        <input type="range" id="conversion-rate" min="0" max="100" step="1" value="5"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="subscription-fee" style="font-size: 0.875rem; color: #0088FF;">Monthly Subscription Fee</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="subscription-value">16.3</span></span>
+                        </div>
+                        <input type="range" id="subscription-fee" min="0" max="100" step="0.1" value="16.3"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">Paid Listings: <span id="paid-listings">0</span></div>
+                        <div style="font-size: 0.9rem; color: #666;">Subscription Revenue:</div>
+                        <div id="subscription-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Affiliate Marketing Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        3. Affiliate Marketing Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Promote third-party products or services within your directory and earn a commission on each sale or referral.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="affiliate-conversion-rate" style="font-size: 0.875rem; color: #0088FF;">Conversion Rate</label>
+                            <span style="font-size: 1rem; color: #0088FF;"><span id="affiliate-conversion-value">2</span>%</span>
+                        </div>
+                        <input type="range" id="affiliate-conversion-rate" min="0" max="100" step="0.1" value="2"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="commission-amount" style="font-size: 0.875rem; color: #0088FF;">Commission per Sale</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="commission-value">25.0</span></span>
+                        </div>
+                        <input type="range" id="commission-amount" min="0" max="200" step="0.1" value="25.0"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">Affiliate Sales: <span id="affiliate-sales">0</span></div>
+                        <div style="font-size: 0.9rem; color: #666;">Affiliate Revenue:</div>
+                        <div id="affiliate-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- E-commerce Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        4. E-commerce Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Promote your own e-commerce products or dropshipping items relevant to the business category.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="ecommerce-conversion-rate" style="font-size: 0.875rem; color: #0088FF;">Conversion Rate</label>
+                            <span style="font-size: 1rem; color: #0088FF;"><span id="ecommerce-conversion-value">1.5</span>%</span>
+                        </div>
+                        <input type="range" id="ecommerce-conversion-rate" min="0" max="100" step="0.1" value="1.5"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="profit-margin" style="font-size: 0.875rem; color: #0088FF;">Profit per Sale</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="profit-margin-value">35.0</span></span>
+                        </div>
+                        <input type="range" id="profit-margin" min="0" max="200" step="0.1" value="35.0"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">E-commerce Sales: <span id="ecommerce-sales">0</span></div>
+                        <div style="font-size: 0.9rem; color: #666;">E-commerce Revenue:</div>
+                        <div id="ecommerce-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Lead Generation Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        5. Lead Generation Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Collect and sell leads to businesses when users submit requests for quotes or appointments.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="lead-conversion-rate" style="font-size: 0.875rem; color: #0088FF;">Lead Conversion Rate</label>
+                            <span style="font-size: 1rem; color: #0088FF;"><span id="lead-conversion-value">3.0</span>%</span>
+                        </div>
+                        <input type="range" id="lead-conversion-rate" min="0" max="100" step="0.1" value="3.0"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="lead-value" style="font-size: 0.875rem; color: #0088FF;">Revenue per Lead</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="lead-value-amount">15.0</span></span>
+                        </div>
+                        <input type="range" id="lead-value" min="0" max="100" step="0.1" value="15.0"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">Total Leads: <span id="total-leads">0</span></div>
+                        <div style="font-size: 0.9rem; color: #666;">Lead Revenue:</div>
+                        <div id="lead-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Rank & Rent Pages Revenue -->
+                <div style="background: white; border: 1px solid rgba(0,136,255,0.1); border-radius: 8px; padding: 1rem;">
+                    <h4 style="color: #0088FF; font-size: 1rem; margin: 0 0 0.75rem 0; display: flex; align-items: center;">
+                        6. Rank & Rent Pages Revenue
+                        <span class="tooltip" style="position: relative; display: inline-block; margin-left: 8px; cursor: help;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #0088FF;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span class="tooltip-text" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); display: none; width: 280px; background-color: #0088FF; color: white; text-align: left; border-radius: 6px; padding: 8px 12px; font-size: 0.875rem; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); pointer-events: none; margin-left: 8px;">
+                                Let businesses pay to secure one of the top 3 featured spots in your directory listings.
+                            </span>
+                        </span>
+                    </h4>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="rank-rent-conversion-rate" style="font-size: 0.875rem; color: #0088FF;">Business Conversion Rate</label>
+                            <span style="font-size: 1rem; color: #0088FF;"><span id="rank-rent-conversion-value">5.0</span>%</span>
+                        </div>
+                        <input type="range" id="rank-rent-conversion-rate" min="0" max="100" step="0.1" value="5.0"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="rank-rent-fee" style="font-size: 0.875rem; color: #0088FF;">Revenue per Top 3 Spot</label>
+                            <span style="font-size: 1rem; color: #0088FF;">$<span id="rank-rent-fee-amount">500.0</span></span>
+                        </div>
+                        <input type="range" id="rank-rent-fee" min="0" max="5000" step="10" value="500"
+                            style="width: 100%; height: 6px; background: rgba(0,136,255,0.1); border-radius: 3px; appearance: none; outline: none;">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <div style="font-size: 0.9rem; color: #666;">Paying Businesses: <span id="paying-businesses">0</span></div>
+                        <div style="font-size: 0.9rem; color: #666;">Rank & Rent Revenue:</div>
+                        <div id="rank-rent-revenue" style="font-size: 1.1rem; font-weight: 600; color: #0088FF;">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(0,136,255,0.05); border-radius: 8px; padding: 1.5rem; text-align: center;">
+                    <h4 style="color: #0088FF; margin: 0 0 1rem 0; font-size: 1.2rem;">Total Monthly Traffic</h4>
+                    <p id="traffic-result" style="font-size: 2.5rem; font-weight: 700; color: #0088FF; margin: 0;">0</p>
+                    <p style="color: #666; margin: 0.5rem 0 0 0; font-size: 0.9rem;">visitors per month</p>
+                </div>
+
+                <div style="background: rgba(0,136,255,0.05); border-radius: 8px; padding: 1.5rem; text-align: center;">
+                    <h4 style="color: #0088FF; margin: 0 0 1rem 0; font-size: 1.2rem;">Total Monthly Revenue</h4>
+                    <p id="total-revenue" style="font-size: 2.5rem; font-weight: 700; color: #0088FF; margin: 0;">$0.00</p>
+                    <p style="color: #666; margin: 0.5rem 0 0 0; font-size: 0.9rem;">combined revenue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript remains largely the same, just update the styling for range inputs
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 16px;
+                height: 16px;
+                background: #0088FF;
+                border-radius: 50%;
+                cursor: pointer;
+                border: 2px solid white;
+                box-shadow: 0 0 3px rgba(0,136,255,0.2);
+            }
+            .tooltip:hover .tooltip-text {
+                display: block !important;
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        // Get all input elements
+        const listingsSlider = document.getElementById('business-listings');
+        const listingsValue = document.getElementById('listings-value');
+        const visitorsSlider = document.getElementById('visitors-per-listing');
+        const visitorsValue = document.getElementById('visitors-value');
+        const rpmInput = document.getElementById('rpm');
+        const rpmValue = document.getElementById('rpm-value');
+        const conversionInput = document.getElementById('conversion-rate');
+        const conversionValue = document.getElementById('conversion-value');
+        const subscriptionInput = document.getElementById('subscription-fee');
+        const subscriptionValue = document.getElementById('subscription-value');
+        const trafficResult = document.getElementById('traffic-result');
+        const adsRevenue = document.getElementById('ads-revenue');
+        const paidListings = document.getElementById('paid-listings');
+        const subscriptionRevenue = document.getElementById('subscription-revenue');
+        const affiliateConversionInput = document.getElementById('affiliate-conversion-rate');
+        const affiliateConversionValue = document.getElementById('affiliate-conversion-value');
+        const commissionInput = document.getElementById('commission-amount');
+        const commissionValue = document.getElementById('commission-value');
+        const affiliateSales = document.getElementById('affiliate-sales');
+        const affiliateRevenue = document.getElementById('affiliate-revenue');
+        const ecommerceConversionInput = document.getElementById('ecommerce-conversion-rate');
+        const ecommerceConversionValue = document.getElementById('ecommerce-conversion-value');
+        const profitMarginInput = document.getElementById('profit-margin');
+        const profitMarginValue = document.getElementById('profit-margin-value');
+        const ecommerceSales = document.getElementById('ecommerce-sales');
+        const ecommerceRevenue = document.getElementById('ecommerce-revenue');
+        const leadConversionInput = document.getElementById('lead-conversion-rate');
+        const leadConversionValue = document.getElementById('lead-conversion-value');
+        const leadValueInput = document.getElementById('lead-value');
+        const leadValueAmount = document.getElementById('lead-value-amount');
+        const totalLeads = document.getElementById('total-leads');
+        const leadRevenue = document.getElementById('lead-revenue');
+        const rankRentConversionInput = document.getElementById('rank-rent-conversion-rate');
+        const rankRentConversionValue = document.getElementById('rank-rent-conversion-value');
+        const rankRentFeeInput = document.getElementById('rank-rent-fee');
+        const rankRentFeeAmount = document.getElementById('rank-rent-fee-amount');
+        const payingBusinesses = document.getElementById('paying-businesses');
+        const rankRentRevenue = document.getElementById('rank-rent-revenue');
+        const totalRevenue = document.getElementById('total-revenue');
+
+        function calculateResults() {
+            const businessListings = parseInt(listingsSlider.value);
+            const visitorsPerListing = parseInt(visitorsSlider.value);
+            const rpm = parseFloat(rpmInput.value);
+            const conversionRate = parseFloat(conversionInput.value) / 100;
+            const subscriptionFee = parseFloat(subscriptionInput.value);
+            const affiliateConversionRate = parseFloat(affiliateConversionInput.value) / 100;
+            const commissionAmount = parseFloat(commissionInput.value);
+            const ecommerceConversionRate = parseFloat(ecommerceConversionInput.value) / 100;
+            const profitMargin = parseFloat(profitMarginInput.value);
+            const leadConversionRate = parseFloat(leadConversionInput.value) / 100;
+            const leadValue = parseFloat(leadValueInput.value);
+            const rankRentConversionRate = parseFloat(rankRentConversionInput.value) / 100;
+            const rankRentFee = parseFloat(rankRentFeeInput.value);
+
+            // Calculate traffic
+            const totalMonthlyTraffic = businessListings * visitorsPerListing;
+            
+            // Calculate individual revenues
+            const adRevenue = (totalMonthlyTraffic / 1000) * rpm;
+            const convertedListings = Math.round(businessListings * conversionRate);
+            const monthlySubscriptionRevenue = convertedListings * subscriptionFee;
+            const monthlyAffiliatesSales = Math.round(totalMonthlyTraffic * affiliateConversionRate);
+            const monthlyAffiliateRevenue = monthlyAffiliatesSales * commissionAmount;
+            const monthlyEcommerceSales = Math.round(totalMonthlyTraffic * ecommerceConversionRate);
+            const monthlyEcommerceRevenue = monthlyEcommerceSales * profitMargin;
+            const monthlyLeads = Math.round(totalMonthlyTraffic * leadConversionRate);
+            const monthlyLeadRevenue = monthlyLeads * leadValue;
+            const monthlyPayingBusinesses = Math.round(businessListings * rankRentConversionRate);
+            const monthlyRankRentRevenue = monthlyPayingBusinesses * rankRentFee;
+            
+            // Calculate total revenue
+            const totalMonthlyRevenue = adRevenue + monthlySubscriptionRevenue + monthlyAffiliateRevenue + 
+                                      monthlyEcommerceRevenue + monthlyLeadRevenue + monthlyRankRentRevenue;
+
+            // Update displays
+            trafficResult.textContent = totalMonthlyTraffic.toLocaleString();
+            adsRevenue.textContent = formatCurrency(adRevenue);
+            paidListings.textContent = convertedListings.toLocaleString();
+            subscriptionRevenue.textContent = formatCurrency(monthlySubscriptionRevenue);
+            affiliateSales.textContent = monthlyAffiliatesSales.toLocaleString();
+            affiliateRevenue.textContent = formatCurrency(monthlyAffiliateRevenue);
+            ecommerceSales.textContent = monthlyEcommerceSales.toLocaleString();
+            ecommerceRevenue.textContent = formatCurrency(monthlyEcommerceRevenue);
+            totalLeads.textContent = monthlyLeads.toLocaleString();
+            leadRevenue.textContent = formatCurrency(monthlyLeadRevenue);
+            payingBusinesses.textContent = monthlyPayingBusinesses.toLocaleString();
+            rankRentRevenue.textContent = formatCurrency(monthlyRankRentRevenue);
+            totalRevenue.textContent = formatCurrency(totalMonthlyRevenue);
+        }
+
+        function formatCurrency(value) {
+            return '$' + value.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Add event listeners
+        listingsSlider.addEventListener('input', function() {
+            listingsValue.textContent = parseInt(this.value).toLocaleString();
+            calculateResults();
+        });
+
+        visitorsSlider.addEventListener('input', function() {
+            visitorsValue.textContent = parseInt(this.value).toLocaleString();
+            calculateResults();
+        });
+
+        rpmInput.addEventListener('input', function() {
+            rpmValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        conversionInput.addEventListener('input', function() {
+            conversionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        subscriptionInput.addEventListener('input', function() {
+            subscriptionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        affiliateConversionInput.addEventListener('input', function() {
+            affiliateConversionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        commissionInput.addEventListener('input', function() {
+            commissionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        ecommerceConversionInput.addEventListener('input', function() {
+            ecommerceConversionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        profitMarginInput.addEventListener('input', function() {
+            profitMarginValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        leadConversionInput.addEventListener('input', function() {
+            leadConversionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        leadValueInput.addEventListener('input', function() {
+            leadValueAmount.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        rankRentConversionInput.addEventListener('input', function() {
+            rankRentConversionValue.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        rankRentFeeInput.addEventListener('input', function() {
+            rankRentFeeAmount.textContent = parseFloat(this.value).toFixed(1);
+            calculateResults();
+        });
+
+        // Initial calculation
+        calculateResults();
+    </script>
+</body>
+</html>
